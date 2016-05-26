@@ -1,12 +1,12 @@
-package com.example.q.mobileplayer;
+package com.example.q.mobileplayer.activity;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
+
+import com.example.q.mobileplayer.R;
 
 public class SplashActivity extends AppCompatActivity {
     private boolean isEnter = false;
