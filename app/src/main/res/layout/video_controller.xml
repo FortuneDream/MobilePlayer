@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,6 +23,7 @@
                 android:text="标题" />
 
             <ImageView
+                tools:ignore="contentDescription"
                 android:id="@+id/power_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,6 +42,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                tools:ignore="contentDescription"
                 android:id="@+id/loud_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,6 +61,7 @@
                 android:thumb="@drawable/default_ico" />
 
             <ImageView
+                tools:ignore="contentDescription"
                 android:id="@+id/switch_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,6 +113,7 @@
             android:orientation="horizontal">
 
             <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/exit_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -116,7 +121,7 @@
                 android:text="循环" />
 
             <Button
-                android:id="@+id/pre_bnt"
+                android:id="@+id/pre_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

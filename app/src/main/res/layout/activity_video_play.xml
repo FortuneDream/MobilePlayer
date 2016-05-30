@@ -12,11 +12,44 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true" />
     <!--浮动在VideoView上-->
+    <!--视频卡效果-->
     <LinearLayout
+        android:background="#88000000"
+        android:id="@+id/buffering_ll"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:text="视频加载中..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/controller_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include layout="@layout/video_controller" />
+    </LinearLayout>
+    <!--加载等待效果-->
+    <LinearLayout
+        android:background="#88000000"
+        android:id="@+id/loading_ll"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:text="视频加载中..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </RelativeLayout>

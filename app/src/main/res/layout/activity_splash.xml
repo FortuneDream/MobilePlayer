@@ -15,11 +15,12 @@
         android:textSize="@dimen/title" />
 
     <ImageView
+        tools:ignore="contentDescription"
         android:id="@+id/splash_ico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/spalsh_ico" />
+        android:src="@drawable/splash_ico" />
 
     <LinearLayout
         android:layout_width="wrap_content"
