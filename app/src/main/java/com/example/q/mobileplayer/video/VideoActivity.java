@@ -1,4 +1,4 @@
-package com.example.q.mobileplayer.activity;
+package com.example.q.mobileplayer.video;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -104,7 +104,7 @@ public class VideoActivity extends BaseActivity {
                         MediaStore.Video.Media.TITLE,
                         MediaStore.Video.Media.DURATION,//时长
                         MediaStore.Video.Media.SIZE,//可用size来去掉短视频，不用时长来判断
-                        MediaStore.Video.Media.DATA,
+                        MediaStore.Video.Media.DATA,//路径
                 };
                 Cursor cursor = resolver.query(uri, projection, null, null, null);
                 while (cursor.moveToNext()) {

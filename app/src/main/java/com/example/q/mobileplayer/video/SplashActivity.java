@@ -1,4 +1,4 @@
-package com.example.q.mobileplayer.activity;
+package com.example.q.mobileplayer.video;
 
 import android.content.Intent;
 import android.os.Handler;

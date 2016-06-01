@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.q.mobileplayer">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -10,43 +11,62 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".video.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.VideoActivity" />
-        <activity android:name=".activity.VideoPlayActivity"
+        <activity android:name=".video.HomeActivity" />
+        <activity android:name=".video.VideoActivity" />
+        <activity
+            android:name=".video.VideoPlayActivity"
             android:screenOrientation="landscape">
-            <!--其他视频可以用这个播放器-->
+
+            <!-- 其他视频可以用这个播放器 -->
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="rtsp"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="rtsp" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="video/*"/>
-                <data android:mimeType="application/sdp"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="video/*" />
+                <data android:mimeType="application/sdp" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="http"/>
-                <data android:mimeType="video/mpeg4"/>
-                <data android:mimeType="video/mp4"/>
-                <data android:mimeType="video/3gp"/>
-                <data android:mimeType="video/3gpp"/>
-                <data android:mimeType="video/3gpp2"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:mimeType="video/mpeg4" />
+                <data android:mimeType="video/mp4" />
+                <data android:mimeType="video/3gp" />
+                <data android:mimeType="video/3gpp" />
+                <data android:mimeType="video/3gpp2" />
             </intent-filter>
         </activity>
-        <!--改为水平方向，横竖屏切换后，不会重新onCreate-->
+        <!-- 改为水平方向，横竖屏切换后，不会重新onCreate -->
+
+
+        <activity android:name=".audio.AudioListActivity" />
+        <activity android:name=".audio.AudioPlayActivity"
+            android:launchMode="singleInstance"/>
+        <!--设置成单例，使得通过通知进入Activity时，不会再次打开新的Activity播放-->
+
+        <service
+            android:name=".service.MediaPlayerService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

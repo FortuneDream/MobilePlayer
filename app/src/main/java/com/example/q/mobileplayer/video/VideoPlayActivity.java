@@ -1,4 +1,4 @@
-package com.example.q.mobileplayer.activity;
+package com.example.q.mobileplayer.video;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -283,6 +283,12 @@ public class VideoPlayActivity extends BaseActivity implements View.OnClickListe
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 Toast.makeText(getApplicationContext(), "出错了", Toast.LENGTH_SHORT).show();
+                /**只要出错，就要回调这个方法
+                 * 1.播放的视频格式不支持，超出了Android手机支持的范围-翻涌万能播放器Vitamio。
+                 * 2.播放网络视频过程中，网络断了，也会导致播放出错----采用重新播放
+                 * 3.下载的视频文件不完整，比如，视频文件的中间段有空白。
+                 * 4.播放一个不是视频的文件
+                 */
                 return true;
             }
         });

@@ -1,4 +1,4 @@
-package com.example.q.mobileplayer.activity;
+package com.example.q.mobileplayer.video;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.q.mobileplayer.R;
+import com.example.q.mobileplayer.audio.AudioListActivity;
 import com.example.q.mobileplayer.bean.HomeItem;
 
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ public class HomeActivity extends BaseActivity {
                         startActivity(intent);
                         break;
                     case 1:
+                        intent =new Intent(HomeActivity.this, AudioListActivity.class);
+                        startActivity(intent);
                         break;
                     case 2:
                         break;

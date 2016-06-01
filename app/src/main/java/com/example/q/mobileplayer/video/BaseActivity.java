@@ -1,4 +1,4 @@
-package com.example.q.mobileplayer.activity;
+package com.example.q.mobileplayer.video;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
