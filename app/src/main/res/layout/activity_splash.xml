@@ -7,25 +7,19 @@
     tools:context=".video.SplashActivity">
 
     <TextView
+        android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/splash_ico"
         android:layout_centerInParent="true"
-        android:text="简易播放器"
+        android:text="MediaPlayer"
         android:textSize="@dimen/title" />
 
-    <ImageView
-        tools:ignore="contentDescription"
-        android:id="@+id/splash_ico"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/splash_ico" />
+
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/splash_ico"
+        android:layout_below="@id/app_name"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
         android:gravity="center"
@@ -38,6 +32,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="正在加载...." />
+            android:text="Loading..." />
     </LinearLayout>
 </RelativeLayout>

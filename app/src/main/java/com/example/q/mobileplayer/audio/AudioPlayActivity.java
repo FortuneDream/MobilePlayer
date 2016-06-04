@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -21,12 +22,14 @@ import com.example.q.mobileplayer.IAudioPlayerService;
 import com.example.q.mobileplayer.R;
 import com.example.q.mobileplayer.service.MediaPlayerService;
 import com.example.q.mobileplayer.video.BaseActivity;
+import com.example.q.mobileplayer.view.ShowLyricTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AudioPlayActivity extends BaseActivity implements View.OnClickListener {
     private static final int PROGRESS = 0;//进度条
+    private static final int LRC_PROGRESS = 1;
     private IAudioPlayerService IAPS;
     private int position;
     private Intent intent;
@@ -34,6 +37,7 @@ public class AudioPlayActivity extends BaseActivity implements View.OnClickListe
     private TextView artistNameTxt;
     private TextView audioNameTxt;
     private TextView timeTxt;
+    private ShowLyricTextView showLrcTxt;
     private Button modeBtn;
     private Button preBtn;
     private Button playBtn;
@@ -45,13 +49,14 @@ public class AudioPlayActivity extends BaseActivity implements View.OnClickListe
     private Boolean isFromNotification;//是否通过状态栏进入
     private SimpleDateFormat format = new SimpleDateFormat("mm:ss");
     private int currentPlayMode=0;
+    private SharedPreferences sp;
     private ServiceConnection SC = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             IAPS = IAudioPlayerService.Stub.asInterface(service);//得到服务
             if (IAPS != null) {
                 try {
-                    if (!isFromNotification){
+                    if (!isFromNotification){//从Activity进入
                         IAPS.openAudio(position);
                     }else {
                         //发一个消息，告诉Activity准备好了,setViewStatus,这样就避免了，从notification进来后无法更新界面的问题（因为没有再次handler.sendMessage);
@@ -77,14 +82,23 @@ public class AudioPlayActivity extends BaseActivity implements View.OnClickListe
                     if (!isDestroy) {
                         mHandler.sendEmptyMessageDelayed(PROGRESS, 1000);
                     }
-                    int currentPosition;
                     try {
-                        currentPosition = IAPS.getCurrentPosition();
+                        int currentPosition = IAPS.getCurrentPosition();
                         progressSbr.setProgress(currentPosition);//刷新进度条
                         timeTxt.setText(format.format(new Date(IAPS.getCurrentPosition())) + "/" + format.format(new Date(IAPS.getDuration())));//刷新时间
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
+                case LRC_PROGRESS:
+                    try {
+                        int currentPosition=IAPS.getCurrentPosition();
+                        showLrcTxt.setShowNextLyric(currentPosition);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    removeMessages(LRC_PROGRESS);//一定要加上
+                    mHandler.sendEmptyMessage(LRC_PROGRESS);
+
             }
         }
     };
@@ -142,7 +156,7 @@ public class AudioPlayActivity extends BaseActivity implements View.OnClickListe
 
 
     }
-
+    //不管是通过Activity还是notification进来，都要发通过服务发广播，然后刷新界面
     //MP准备好之后发广播，这是界面初时状态，handler发消息，进度条和时间开始移动
     private void setViewStatus() {
         try {
@@ -153,6 +167,7 @@ public class AudioPlayActivity extends BaseActivity implements View.OnClickListe
             currentPlayMode=IAPS.getPlayMode();
             changeMode(currentPlayMode);
             mHandler.sendEmptyMessage(PROGRESS);
+            mHandler.sendEmptyMessage(LRC_PROGRESS);//发消息更新移动歌词
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -205,6 +220,7 @@ public class AudioPlayActivity extends BaseActivity implements View.OnClickListe
         nextBtn = (Button) findViewById(R.id.next_btn);
         lyricsBtn = (Button) findViewById(R.id.lyrics_btn);
         progressSbr = (SeekBar) findViewById(R.id.progress_sbr);
+        showLrcTxt = (ShowLyricTextView) findViewById(R.id.show_lrc_txt);
 
     }
 
@@ -222,11 +238,11 @@ public class AudioPlayActivity extends BaseActivity implements View.OnClickListe
         switch (v.getId()) {
             //设置播放模式
             case R.id.mode_btn:
-                try {
-                    currentPlayMode=(IAPS.getPlayMode()+1)%3;
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+                currentPlayMode=(currentPlayMode+1)%2;//两种播放模式
+                sp=getSharedPreferences("setup",MODE_PRIVATE);
+                SharedPreferences.Editor editor=sp.edit();
+                editor.putInt("play_mode",currentPlayMode);
+                editor.apply();
                 changeMode(currentPlayMode);
                 break;
             case R.id.pre_btn:
@@ -267,9 +283,6 @@ public class AudioPlayActivity extends BaseActivity implements View.OnClickListe
             if (currentPlayMode==MediaPlayerService.REPEAT_MODE_NORMAL){
                 currentPlayMode=MediaPlayerService.REPEAT_MODE_NORMAL;
                 modeBtn.setText("全部循环");
-            }else if (currentPlayMode==MediaPlayerService.MODE_ALL){
-                currentPlayMode=MediaPlayerService.MODE_ALL;
-                modeBtn.setText("顺序播放");
             }else if (currentPlayMode==MediaPlayerService.REPEAT_MODE_CURRENT){
                 currentPlayMode=MediaPlayerService.REPEAT_MODE_CURRENT;
                 modeBtn.setText("单曲循环");

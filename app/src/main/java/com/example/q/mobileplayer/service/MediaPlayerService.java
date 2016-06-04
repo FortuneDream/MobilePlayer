@@ -1,11 +1,11 @@
 package com.example.q.mobileplayer.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -32,7 +32,7 @@ public class MediaPlayerService extends Service {
     private int currentPosition;
     public static int REPEAT_MODE_NORMAL = 0;//默认模式，顺序循环,一定要设置为静态，否则无法从外部得到
     public static int REPEAT_MODE_CURRENT = 1;//单曲循环
-    public static int MODE_ALL = 2;//播放全部
+    private SharedPreferences sp;
     private int playMode = REPEAT_MODE_NORMAL;
 
     public MediaPlayerService() {
@@ -43,7 +43,14 @@ public class MediaPlayerService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.e(TAG, "Service onCreate");
+
+        initData();
+    }
+
+    private void initData() {
         getAllAudio();
+        sp=getSharedPreferences("setup",MODE_PRIVATE);
+        playMode=sp.getInt("play_mode",REPEAT_MODE_NORMAL);
     }
 
     private void getAllAudio() {
@@ -130,16 +137,11 @@ public class MediaPlayerService extends Service {
         MP.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if (getPlayMode() == MediaPlayerService.REPEAT_MODE_NORMAL) {
+                if (getPlayMode() == MediaPlayerService.REPEAT_MODE_CURRENT) {//单曲循环
                     currentPosition--;
-                    next();
-                } else if (getPlayMode() == MediaPlayerService.MODE_ALL) {
-                    if (currentPosition == audioItems.size() - 1) {
-                        return;
-                    }
-                } else if (getPlayMode() == MediaPlayerService.REPEAT_MODE_CURRENT) {
-                    next();
                 }
+                next();
+                Log.e(TAG,"当前播放模式："+getPlayMode()+"  "+"当前播放位置："+currentPosition);
 
             }
         });
@@ -232,6 +234,9 @@ public class MediaPlayerService extends Service {
      */
     private void setPlayMode(int mode) {
         playMode = mode;
+        SharedPreferences.Editor editor=sp.edit();
+        editor.putInt("play_mode",mode);
+        editor.apply();
     }
 
     //上一首
